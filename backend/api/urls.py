@@ -3,7 +3,7 @@ from rest_framework.routers import DefaultRouter
 
 from .views import (CustomUserViewSet, GetSubscribeVeiwSet, IngredientViewSet,
                     RecipeViewSet, TagViewSet, download_shopping_cart,
-                    favorited, load_data, shopping_cart, subscribe)
+                    favorited, shopping_cart, subscribe)
 
 router_v1 = DefaultRouter()
 router_v1.register(
@@ -28,7 +28,7 @@ router_v1.register(
 )
 
 urlpatterns = [
-    path('l/', load_data),
+    # path('l/', load_data),
     path('auth/', include('djoser.urls.authtoken')),
     path(
         'recipes/<int:recipe_id>/favorite/',

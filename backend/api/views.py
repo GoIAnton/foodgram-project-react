@@ -1,6 +1,4 @@
 import io
-import json
-import os
 
 from django.contrib.auth.tokens import default_token_generator
 from django.db.models import Sum
@@ -296,14 +294,14 @@ def download_shopping_cart(request):
     )
 
 
-def load_data(request):
-    print(os.path.abspath(__file__))
-    f = open('/app/api/ingredients.json')
-    json_string = f.read()
-    f.close()
-    data = json.loads(json_string)
-    for item in data:
-        name = item['name']
-        measurement_unit = item['measurement_unit']
-        Ingredient.objects.get_or_create(name=name,
-                                         measurement_unit=measurement_unit)
+# def load_data(request):
+#     print(os.path.abspath(__file__))
+#     f = open('/app/api/ingredients.json')
+#     json_string = f.read()
+#     f.close()
+#     data = json.loads(json_string)
+#     for item in data:
+#         name = item['name']
+#         measurement_unit = item['measurement_unit']
+#         Ingredient.objects.get_or_create(name=name,
+#                                          measurement_unit=measurement_unit)
