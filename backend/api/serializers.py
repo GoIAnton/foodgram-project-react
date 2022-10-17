@@ -1,11 +1,12 @@
 import base64
 
-from backend.settings import ALLOWED_HOSTS
 from django.core.files.base import ContentFile
 from django.shortcuts import get_object_or_404
 from djoser.serializers import UserCreateSerializer, UserSerializer
 from rest_framework import serializers
 from rest_framework.settings import api_settings
+
+from backend.settings import ALLOWED_HOSTS
 
 from .models import (Favorited, Follow, Ingredient, IngredientRecipe, Recipe,
                      ShoppingCart, Tag, User)
@@ -86,8 +87,7 @@ class Base64ImageField(serializers.ImageField):
                 return None
             request = self.context.get('request', None)
             if request is not None:
-                custom_url = 'http://' + ALLOWED_HOSTS[0] + url
-                return custom_url
+                return 'http://' + ALLOWED_HOSTS[0] + url
             return url
 
         return value.name
