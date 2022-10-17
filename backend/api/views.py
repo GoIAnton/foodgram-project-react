@@ -119,6 +119,14 @@ class RecipeViewSet(ModelViewSet):
         tags = self.request.query_params.getlist('tags', False)
         if tags:
             queryset = queryset.filter(tags__slug__in=tags).distinct()
+        is_in_shopping_cart = self.request.query_params.get(
+            'is_in_shopping_cart',
+            '0'
+        )
+        if is_in_shopping_cart == '1':
+            queryset = queryset.filter(
+                shoppingcart__user=request.user
+            )
         is_favorited = self.request.query_params.get('is_favorited', '0')
         if is_favorited == '1':
             queryset = queryset.filter(
