@@ -1,3 +1,4 @@
+from colorfield.fields import ColorField
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator
 from django.db import models
@@ -9,7 +10,7 @@ class User(AbstractUser):
 
 class Tag(models.Model):
     name = models.CharField(max_length=200)
-    color = models.CharField(max_length=7, default=None)
+    color = ColorField()
     slug = models.SlugField(max_length=200, unique=True, default=None)
 
     def __str__(self):

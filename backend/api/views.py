@@ -1,14 +1,9 @@
-import io
-
 from django.contrib.auth.tokens import default_token_generator
 from django.db.models import Sum
 from django.http import FileResponse
 from django.shortcuts import get_object_or_404
 from djoser import signals
 from djoser.conf import settings
-from reportlab.pdfbase import pdfmetrics
-from reportlab.pdfbase.ttfonts import TTFont
-from reportlab.pdfgen import canvas
 from rest_framework import status
 from rest_framework.decorators import action, api_view
 from rest_framework.exceptions import NotFound
@@ -19,6 +14,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import (GenericViewSet, ModelViewSet,
                                      ReadOnlyModelViewSet)
 
+from .create_pdf import create_shopping_cart_pdf
 from .models import (Favorited, Follow, Ingredient, IngredientRecipe, Recipe,
                      ShoppingCart, Tag, User)
 from .paginations import CustomPagination
@@ -220,7 +216,7 @@ def subscribe(request, user_id):
         user=user
     ).exists():
         return Response(
-            {"errors": "Рецепт уже добавлен в список покупок"},
+            {"errors": "Вы уже подписаны на данного пользователя"},
             status=status.HTTP_400_BAD_REQUEST,
         )
     Follow.objects.create(
@@ -277,39 +273,8 @@ def download_shopping_cart(request):
         'ingredient__name',
         'ingredient__measurement_unit'
     ).annotate(amount=Sum('amount'))
-    pdf = io.BytesIO()
-    pdf_obj = canvas.Canvas(pdf)
-    arial = TTFont('Arial', 'arial.ttf')
-    pdfmetrics.registerFont(arial)
-    pdf_obj.setFont('Arial', 14)
-    line_num = 760
-    for ingredient in ingredients:
-        pdf_obj.drawString(
-            100,
-            line_num,
-            (f'{ingredient["ingredient__name"]} - '
-             f'{ingredient["amount"]} '
-             f'{ingredient["ingredient__measurement_unit"]}'),
-        )
-        line_num -= 20
-    pdf_obj.showPage()
-    pdf_obj.save()
-    pdf.seek(0)
     return FileResponse(
-        pdf,
+        create_shopping_cart_pdf(ingredients),
         as_attachment=True,
         filename='shopping_cart.pdf',
     )
-
-
-# def load_data(request):
-#     print(os.path.abspath(__file__))
-#     f = open('/app/api/ingredients.json')
-#     json_string = f.read()
-#     f.close()
-#     data = json.loads(json_string)
-#     for item in data:
-#         name = item['name']
-#         measurement_unit = item['measurement_unit']
-#         Ingredient.objects.get_or_create(name=name,
-#                                          measurement_unit=measurement_unit)

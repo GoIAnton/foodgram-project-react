@@ -27,17 +27,24 @@ git clone https://github.com/GoIAnton/foodgram-project-react.git
 cd infra/
 ```
 
+Создание .env
+```
+cp .env.example .env
+```
+
 Запуск docker-compose:
 ```
 docker-compose up
 ```
 
-Миграции -> создание суперюзера -> собрать статику нужной папке:
+Миграции -> создание суперюзера -> собрать статику нужной папке -> заполнить БД ингредиентами и тегами:
 ```
-docker-compose exec web python manage.py makemigrations
-docker-compose exec web python manage.py migrate
-docker-compose exec web python manage.py createsuperuser
-docker-compose exec web python manage.py collectstatic --no-input
+docker-compose exec backend python manage.py makemigrations
+docker-compose exec backend python manage.py migrate
+docker-compose exec backend python manage.py createsuperuser
+docker-compose exec backend python manage.py collectstatic --no-input
+docker-compose exec backend python manage.py load_ingredients
+docker-compose exec backend python manage.py load_tags
 ```
 
 ### Об авторе:

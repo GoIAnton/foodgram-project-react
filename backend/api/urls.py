@@ -28,7 +28,6 @@ router_v1.register(
 )
 
 urlpatterns = [
-    # path('l/', load_data),
     path('auth/', include('djoser.urls.authtoken')),
     path(
         'recipes/<int:recipe_id>/favorite/',
