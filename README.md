@@ -49,6 +49,4 @@ docker-compose exec backend python manage.py load_tags
 
 ### Об авторе:
 
-Начинающий бекэнд разработчик на Python
-Мой github:
-https://github.com/GoIAnton
+Начинающий бекэнд разработчик на Python. Мой github: https://github.com/GoIAnton
